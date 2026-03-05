@@ -9,6 +9,9 @@ import { rateLimiter } from './src/middlewares/rateLimit.middleware.js';
 import { cacheControl } from './src/middlewares/cache.middleware.js';
 import { errorHandler } from './src/middlewares/error.middleware.js';
 import productRoutes from './src/routes/product.routes.js';
+import userRoutes from './src/routes/user.routes.js';
+import ratingRoutes from './src/routes/rating.routes.js';
+import orderRoutes from './src/routes/order.routes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,6 +30,9 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/products', cacheControl, productRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/ratings', ratingRoutes);
+app.use('/api/orders', orderRoutes);
 
 app.use((req, res, next) => {
   const err = new Error('Route introuvable');

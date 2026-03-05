@@ -1,8 +1,8 @@
 import { EntitySchema } from 'typeorm';
 
-export const ProductSchema = new EntitySchema({
-  name: 'Product',
-  tableName: 'products',
+export const UserSchema = new EntitySchema({
+  name: 'User',
+  tableName: 'users',
   columns: {
     id: {
       type: 'varchar',
@@ -10,33 +10,33 @@ export const ProductSchema = new EntitySchema({
       primary: true,
       generated: 'uuid',
     },
-    name: {
-      type: 'varchar',
-      length: 255,
-      nullable: false,
-    },
-    price: {
-      type: 'decimal',
-      precision: 10,
-      scale: 2,
-      nullable: false,
-    },
-    category: {
+    firstName: {
       type: 'varchar',
       length: 100,
       nullable: false,
     },
+    lastName: {
+      type: 'varchar',
+      length: 100,
+      nullable: false,
+    },
+    email: {
+      type: 'varchar',
+      length: 255,
+      unique: true,
+      nullable: false,
+    },
   },
   relations: {
+    orders: {
+      type: 'one-to-many',
+      target: 'Order',
+      inverseSide: 'user',
+    },
     ratings: {
       type: 'one-to-many',
       target: 'Rating',
-      inverseSide: 'product',
-    },
-    orders: {
-      type: 'many-to-many',
-      target: 'Order',
-      inverseSide: 'products',
+      inverseSide: 'user',
     },
   },
 });
