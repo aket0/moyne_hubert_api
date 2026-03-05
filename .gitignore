@@ -1,0 +1,15 @@
+.env
+/logs
+/node_modules
+/dist
+/build
+.DS_Store
+*.log
+*.tmp
+*.bak
+*.swp
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.iml
