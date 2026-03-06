@@ -8,10 +8,14 @@ const getOrderRepo = () => AppDataSource.getRepository(OrderSchema);
 const getUserRepo = () => AppDataSource.getRepository(UserSchema);
 const getProductRepo = () => AppDataSource.getRepository(ProductSchema);
 
+const toMoney = (value) => Number.parseFloat(Number(value).toFixed(2));
+const computeTotalPrice = (products) => toMoney(products.reduce((sum, product) => sum + Number(product.price), 0));
+
 const normalize = (order) => ({
   id: order.id,
   userId: order.user?.id,
   productIds: order.products?.map((product) => product.id) || [],
+  totalPrice: toMoney(order.totalPrice ?? 0),
 });
 
 const resolveOrderRelations = async ({ userId, productIds }) => {
@@ -49,10 +53,11 @@ export const findById = async (id) => {
 
 export const create = async ({ userId, productIds }) => {
   const { user, products } = await resolveOrderRelations({ userId, productIds });
+  const totalPrice = computeTotalPrice(products);
   const repo = getOrderRepo();
-  const order = repo.create({ user, products });
+  const order = repo.create({ user, products, totalPrice });
   const saved = await repo.save(order);
-  return normalize({ ...saved, user, products });
+  return normalize({ ...saved, user, products, totalPrice });
 };
 
 export const update = async (id, data) => {
@@ -64,8 +69,10 @@ export const update = async (id, data) => {
   const nextProductIds = data.productIds ?? order.products.map((product) => product.id);
 
   const { user, products } = await resolveOrderRelations({ userId: nextUserId, productIds: nextProductIds });
+  const totalPrice = computeTotalPrice(products);
   order.user = user;
   order.products = products;
+  order.totalPrice = totalPrice;
 
   const saved = await repo.save(order);
   return normalize(saved);

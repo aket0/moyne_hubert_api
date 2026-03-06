@@ -5,6 +5,7 @@ import { ProductSchema } from '../entities/product.entity.js';
 import { UserSchema } from '../entities/user.entity.js';
 import { RatingSchema } from '../entities/rating.entity.js';
 import { OrderSchema } from '../entities/order.entity.js';
+import { ApiKeySchema } from '../entities/apiKey.entity.js';
 
 dotenv.config();
 
@@ -17,6 +18,6 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: process.env.NODE_ENV !== 'production', 
   logging: process.env.DB_LOGGING === 'true',
-  entities: [ProductSchema, UserSchema, RatingSchema, OrderSchema],
+  entities: [ProductSchema, UserSchema, RatingSchema, OrderSchema, ApiKeySchema],
   poolSize: Number(process.env.DB_CONN_LIMIT) || 5,
 });

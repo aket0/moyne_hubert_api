@@ -10,6 +10,13 @@ export const OrderSchema = new EntitySchema({
       primary: true,
       generated: 'uuid',
     },
+    totalPrice: {
+      type: 'decimal',
+      precision: 10,
+      scale: 2,
+      nullable: false,
+      default: 0,
+    },
   },
   relations: {
     user: {
